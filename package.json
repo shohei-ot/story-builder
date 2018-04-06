@@ -8,6 +8,10 @@
   "scripts": {
     "builder": "node ./index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shohei-ot/story-builder"
+  },
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
