@@ -76,7 +76,7 @@ if (outDir !== defaultOutDir) {
   fs.accessSync(outDir)
 }
 
-const type = ['vue', 'react'].includes(args.options.type || 'vue') ? args.options.type : 'vue'
+const type = ['vue', 'react'].includes(args.options.type) ? args.options.type : 'vue'
 const storyPrefix = args.options.storyprefix || ''
 
 // import + convert + export
