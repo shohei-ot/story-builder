@@ -168,7 +168,7 @@ const prettierOptions = {
   useTabs: false,
   semi: false,
   singleQuote: true,
-  trailingCOmma: 'none',
+  trailingComma: 'none',
   bracketSpacing: true,
   jsxBracketSameLine: true,
   arrowParens: 'avoid'
