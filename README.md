@@ -38,6 +38,10 @@ yarn run builder --in=/path/to/my-components-dir --out=/path/to/my-stories-dir
 		出力先ディレクトリ (default: ./export)
 		`--out=../stories` OR `-o ../stories`
 
+	--force, -f
+		出力先ファイルが存在する場合に上書きする
+		`--fource` OR `-f`
+
 	--type, -t
 		使用するStorybookの指定 (default: "vue")
 		`--type=react` OR `-t react`

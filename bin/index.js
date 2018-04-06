@@ -37,7 +37,7 @@ const argOpts = [
     name: 'force',
     short: 'f',
     type: 'boolean',
-    description: '出力ファイルが存在する場合に上書きする',
+    description: '出力先ファイルが存在する場合に上書きする',
     example: '`--fource` OR `-f`'
   },
   {
