@@ -14,6 +14,15 @@ class Component extends Base {
     return camelCase(this.name, { pascalCase: true })
   }
 
+  getComponentInfo() {
+    return {
+      componentName: this.componentName,
+      storyName: this.getStoryName(),
+      name: this.name,
+      path: this.path
+    }
+  }
+
   getStoryName() {
     const nameList = []
     nameList.push(this.componentName)
