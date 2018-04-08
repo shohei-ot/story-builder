@@ -128,7 +128,7 @@ for (const name of fileNameList) {
 const storiesFileName = inDirName + '.js'
 const storiesFilePath = path.resolve(outDir, storiesFileName)
 try {
-  if(!force){
+  if (!force) {
     fs.accessSync(storiesFilePath)
     // console.log("can access: " + storiesFilePath);
     console.log('')
@@ -184,8 +184,8 @@ const prettierOptions = {
   arrowParens: 'avoid'
 }
 const prettieredCode = prettier.format(code, prettierOptions)
-if(force){
-  fs.writeFileSync(storiesFilePath, '', {flag: 'w+'})  
+if (force) {
+  fs.writeFileSync(storiesFilePath, '', { flag: 'w+' })
 }
 fs.writeFileSync(storiesFilePath, prettieredCode, writeOptions)
 try {
