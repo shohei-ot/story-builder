@@ -89,7 +89,7 @@ class Generator {
       console.log('❌ Failed!')
       console.log(e)
     }
-    // this.unlinkTmpDir()
+    this.unlinkTmpDir()
   }
 
   get prettier() {
