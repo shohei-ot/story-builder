@@ -79,5 +79,6 @@ yarn run builder --in=../../resources/assets/js/components --out=../../resources
     -o, --out <path>       出力先ディレクトリ (例: `--out=/path/to/stories`)
     -F, --force            出力先が存在する場合に、差分を追加するようにする。
     -p, --prettier <path>  prettier config file path
+    -x, --prefix <param>   `sotiresOf()` の第一引数にプレフィックスを付けるようにする。
     -h, --help             output usage information
 ```
