@@ -40,7 +40,7 @@ class Generator {
    * story file を出力する.
    * @param {Story} story
    */
-  run(story) {
+  run(story, overwrite = false) {
     this.initTmpDir()
     try {
       const componentList = story.getAllComponent()
@@ -58,7 +58,6 @@ class Generator {
       for (const filename of storyFileNameList) {
         this.initTmpFile(filename)
       }
-      return
       // init story files / end
 
       // import, storiesOf 構文チェックとコードの追記
@@ -79,7 +78,11 @@ class Generator {
       for (const filename of storyFileNameList) {
         const tmpFilePath = this.genTmpStoryFilePath(filename)
         const outputFilePath = this.genOutputStoryFilePath(filename)
-        this.fileToFile(tmpFilePath, outputFilePath)
+        if(Stats.isExist(outputFilePath) && !overwrite){
+          console.log('Already exist: '+outputFilePath)
+        }else{
+          this.fileToFile(tmpFilePath, outputFilePath)
+        }
       }
 
       // console.log('after write output')
@@ -141,28 +144,35 @@ class Generator {
     if (Stats.isExist(tmpFilePath)) {
       fs.unlinkSync(tmpFilePath)
     }
-    let importStoriesOfCode = `import { storiesOf } from '@storybook/${
-      this.type
-    }'\n`
-    // TODO: 出力済ファイルの取り込み
+    // 出力済ファイルがあれば取り込み
     if (this._isExistOutputFile(storyFileName)) {
-      console.log('######## _isExistOutputFile #########')
+      // 一時ファイルに書き込み
       const outputFilePath = this.genOutputStoryFilePath(storyFileName)
-      this.fileToFile(outputFilePath, this.genTmpStoryFilePath(storyFileName))
-      const outputCode = fs.readFileSync(outputFilePath, { encoding: 'utf8' })
+      this.fileToFile(outputFilePath, tmpFilePath)
 
-      const regExpStoriesOfCode =
-        'import\\s*\\{\\s*storiesOf\\s*\\}\\s*from\\s(\'|")@storybook\\/' +
-        this.type +
-        '(\'|")'
-      if (!new RegExp(regExpStoriesOfCode).test(outputCode)) {
-        importStoriesOfCode += outputCode
+      // storiesOf が無ければ追加する
+      const tmpFileCode = fs.readFileSync(tmpFilePath, {
+        encoding: 'utf8'
+      })
+      const hasImportStoriesOf = /import\s*\{\s*storiesOf\s*\}\s*from\s*('|")@storybook\//.test(
+        tmpFileCode
+      )
+      if (!hasImportStoriesOf) {
+        fs.writeFileSync(
+          tmpFilePath,
+          `import { storiesOf } from '@storybook/${this.type}'\n${tmpFileCode}`,
+          { encoding: 'utf8', flag: 'w' }
+        )
       }
+    } else {
+      const importStoriesOfCode = `import { storiesOf } from '@storybook/${
+        this.type
+      }'\n`
+      fs.writeFileSync(tmpFilePath, importStoriesOfCode, {
+        encoding: 'utf8',
+        flag: 'w'
+      })
     }
-    fs.writeFileSync(tmpFilePath, importStoriesOfCode, {
-      encoding: 'utf8',
-      flag: 'w'
-    })
   }
 
   genOutputStoryFilePath(storyFileName) {
@@ -378,13 +388,8 @@ class Generator {
     const storyName = component.getStoryName()
     const fullStoryName = (storyPrefix + storyName).replace(/\//gm, '\\/')
     const regExpStr = `storiesOf\\s*\\(\\s*(\\'|\\")${fullStoryName}(\\'|\\")\\s*,\\s*module\\s*`
-    // console.log('regExpStr')
-    // console.log(regExpStr)
     return new RegExp(regExpStr).test(code)
   }
-
-  // writeImportSyntax(filepath: string)
-  // writeStoriesOfSyntax(component: Component)
 
   initTmpDir() {
     try {

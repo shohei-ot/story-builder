@@ -15,4 +15,4 @@ const story = new Story(dirPath)
 const generator = new Generator(outputDir)
 
 generator.setPrettierConfig(JSON.parse(prettierConfig))
-generator.run(story)
+generator.run(story, true)
