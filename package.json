@@ -1,12 +1,13 @@
 {
   "name": "story-builder",
   "description": "component stories builder for Storybook",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "author": "shohei-ot",
   "license": "MIT",
   "scripts": {
-    "builder": "node ./index.js"
+    "builder": "node ./bin/index.js",
+    "dev:test": "node ./test/dev/index.js"
   },
   "repository": {
     "type": "git",
@@ -20,10 +21,12 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
+    "jest": "^22.4.3",
     "prettier": "^1.11.1"
   },
   "dependencies": {
-    "argv": "^0.0.2",
-    "camelcase": "^5.0.0"
+    "camelcase": "^5.0.0",
+    "commander": "^2.15.1",
+    "fs-readdir-recursive": "^1.1.0"
   }
 }
