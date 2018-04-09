@@ -15,7 +15,16 @@ class Generator {
     this._type = type
     this._outputDir = outputDir
     this._storyPrefix = []
-    // this._prettier = JSON.parse(JSON.stringify(prettierrOption))
+    this._prettier = {}
+
+    // ref: Generate a random string in JavaScript In a short and fast way! https://gist.github.com/6174/6062387
+    this._tmpHash =
+      Math.random()
+        .toString(36)
+        .substring(2, 15) +
+      Math.random()
+        .toString(36)
+        .substring(2, 15)
   }
 
   setPrettierConfig(option) {
@@ -75,21 +84,31 @@ class Generator {
       }
 
       // 一時ファイルを出力先ファイルへ書き出す
+      const outputedFilePathList = []
       for (const filename of storyFileNameList) {
         const tmpFilePath = this.genTmpStoryFilePath(filename)
         const outputFilePath = this.genOutputStoryFilePath(filename)
-        if(Stats.isExist(outputFilePath) && !overwrite){
-          console.log('Already exist: '+outputFilePath)
-        }else{
+        if (Stats.isExist(outputFilePath) && !overwrite) {
+          console.log('Already exists: ' + outputFilePath)
+        } else {
           this.fileToFile(tmpFilePath, outputFilePath)
+          outputedFilePathList.push(outputFilePath)
         }
       }
 
       // console.log('after write output')
 
-      console.log('✨ Done!😊')
+      console.log('\n' + 'Outputs:')
+      if (outputedFilePathList.length) {
+        outputedFilePathList.forEach(p => {
+          console.log('> ' + p)
+        })
+      } else {
+        console.log('> none')
+      }
+      console.log('\n' + '✨  Done!😊')
     } catch (e) {
-      console.log('❌ Failed!')
+      console.log('❌  Failed!')
       console.log(e)
     }
     this.unlinkTmpDir()
@@ -131,7 +150,7 @@ class Generator {
    * @return {String}
    */
   get tmpDir() {
-    return path.resolve(this.outputDir, 'tmp')
+    return path.resolve(this.outputDir, 'tmp_' + this._tmpHash)
   }
 
   /**
