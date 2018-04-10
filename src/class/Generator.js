@@ -316,13 +316,17 @@ class Generator {
       encoding: 'utf8'
     })
     let replacedCode = ''
-    const matched = origCode.match(/^import\s+[^\n]+/g)
-    if (matched !== null && matched.length) {
-      // console.log('matched', matched)
+    const reg = new RegExp(
+      '^import\\s+\\{?(\\s*[a-zA-Z_$][a-zA-Z0-9_$]*\\s*,?)+\\}?\\s*from\\s+(\'|")[^\'"]+(\'|")\\s*;?\\s*\\n?$',
+      'gm'
+    )
+    if (reg.test(origCode)) {
+      const lastIndex = reg.lastIndex
+      const matched = origCode.match(reg)
       const lastImportSyntax = matched[matched.length - 1]
       replacedCode = origCode.replace(
         lastImportSyntax,
-        `${lastImportSyntax}\n${importSyntaxCode};`
+        `${lastImportSyntax};${importSyntaxCode}`
       )
     } else {
       replacedCode = importSyntaxCode + ';'

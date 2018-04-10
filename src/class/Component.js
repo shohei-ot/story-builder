@@ -11,7 +11,22 @@ class Component extends Base {
   }
 
   get componentName() {
-    return camelCase(this.name, { pascalCase: true })
+    let name = this.name
+    name = camelCase(name, { pascalCase: true })
+
+    const validVarPtrn = new RegExp('^[a-z$_][a-z0-9$_]*$', 'im')
+    const allowedVarCharStartPtrn = new RegExp('^[a-zA-Z$_]', 'i')
+    const invalidVarcharPtrn = new RegExp('[^a-z0-9$_]', 'gi')
+
+    // JSが変数名に使えない文字列を含む場合
+    if (!allowedVarCharStartPtrn.test(name)) {
+      name = 'the_' + name
+    }
+    if (!validVarPtrn.test(name)) {
+      name = name.replace(invalidVarcharPtrn, '_')
+    }
+
+    return camelCase(name, { pascalCase: true })
   }
 
   getComponentInfo() {
